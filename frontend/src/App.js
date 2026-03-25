@@ -1,30 +1,56 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Search from "./components/Search";
 import WeatherCard from "./components/WeatherCard";
 import Forecast from "./components/Forecast";
+import WeatherGraph from "./components/WeatherGraph";
+import WindDirection from "./components/WindDirection";
+import RecentSearches from "./components/RecentSearches";
 
-function App(){
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
-const [weather,setWeather] = useState(null);
+function Dashboard() {
+  const [weather, setWeather] = useState(null);
+  const [selectedCity, setSelectedCity] = useState("");
 
-return(
+  return (
+    <div className="container">
+      <h1>⛅ Weather Dashboard</h1>
 
-<div className="container">
+      <Search setWeather={setWeather} selectedCity={selectedCity} />
 
-<h1>⛅ Weather Dashboard</h1>
+      <RecentSearches onSelect={(city) => setSelectedCity(city)} />
 
-<Search setWeather={setWeather}/>
+      <WeatherCard data={weather} />
 
-<WeatherCard data={weather}/>
+      <div className="dashboard-row">
+        <div className="dashboard-box">
+          <Forecast forecast={weather?.forecast} />
+        </div>
 
-<Forecast forecast={weather?.forecast}/>
+        <div className="dashboard-box">
+          <WeatherGraph forecast={weather?.forecast} />
+        </div>
+      </div>
 
-</div>
+      <WindDirection degree={weather?.windDirection} />
+    </div>
+  );
+}
 
-);
-
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
