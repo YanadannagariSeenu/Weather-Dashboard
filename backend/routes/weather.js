@@ -37,6 +37,7 @@ router.get("/:city", async (req, res) => {
           (error, stdout, stderr) => {
             if (error) {
               console.log("ML Error:", error.message);
+              console.log("STDERR:", stderr);
               resolve(0);
             } else {
               resolve(stdout);
