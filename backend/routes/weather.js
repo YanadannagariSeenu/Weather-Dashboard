@@ -1,6 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const Weather = require("../models/Weather");
+const { exec } = require("child_process");
 
 const router = express.Router();
 
@@ -17,27 +18,52 @@ router.get("/:city", async (req, res) => {
     const data = response.data;
 
     if (!data || !data.list || data.list.length === 0) {
-      return res.status(400).json({ message: "Invalid city name" });
+      return res.status(400).json({ message: "Invalid city" });
     }
 
     const weatherData = {
       city: city,
-      temperature: data.list[0].main?.temp,
-      humidity: data.list[0].main?.humidity,
-      windSpeed: data.list[0].wind?.speed,
-      windDirection: data.list[0].wind?.deg,
+      temperature: data.list[0].main.temp,
+      humidity: data.list[0].main.humidity,
+      windSpeed: data.list[0].wind.speed,
+      windDirection: data.list[0].wind.deg,
       forecast: data.list.slice(0, 5)
     };
 
-    await Weather.create(weatherData);
+    const runML = (temp, humidity, wind) => {
+      return new Promise((resolve) => {
+        exec(
+          `py ../ml/model.py ${temp} ${humidity} ${wind}`,
+          (error, stdout, stderr) => {
+            if (error) {
+              console.log("ML Error:", error.message);
+              resolve(0);
+            } else {
+              resolve(stdout);
+            }
+          }
+        );
+      });
+    };
+
+    const predictedTemp = await runML(
+      weatherData.temperature,
+      weatherData.humidity,
+      weatherData.windSpeed
+    );
+
+    weatherData.prediction = parseFloat(predictedTemp);
+
+    //const newWeather = new Weather(weatherData);
+    //await newWeather.save();
 
     res.json(weatherData);
 
   } catch (error) {
-    console.log("FULL ERROR:", error.response?.data || error.message);
+    console.log("ERROR:", error.response?.data || error.message);
 
     res.status(500).json({
-      message: "Weather fetch failed",
+      message: "Error fetching weather",
       error: error.response?.data || error.message
     });
   }

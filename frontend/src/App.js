@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 
 import Search from "./components/Search";
 import WeatherCard from "./components/WeatherCard";
@@ -15,15 +15,39 @@ import Signup from "./pages/Signup";
 function Dashboard() {
   const [weather, setWeather] = useState(null);
   const [selectedCity, setSelectedCity] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/");
+  };
 
   return (
     <div className="container">
-      <h1>⛅ Weather Dashboard</h1>
+      
+      <div className="top-bar">
+        <h1>⛅ Weather Dashboard</h1>
+
+        <div className="menu">
+          <div
+            className="hamburger"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            ☰
+          </div>
+
+          {menuOpen && (
+            <div className="dropdown">
+              <p onClick={handleLogout}>Logout</p>
+            </div>
+          )}
+        </div>
+      </div>
 
       <Search setWeather={setWeather} selectedCity={selectedCity} />
-
       <RecentSearches onSelect={(city) => setSelectedCity(city)} />
-
       <WeatherCard data={weather} />
 
       <div className="dashboard-row">

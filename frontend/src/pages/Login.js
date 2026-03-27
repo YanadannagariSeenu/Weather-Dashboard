@@ -7,29 +7,39 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        form
-      );
-
-      localStorage.setItem("token", res.data.token);
+      await axios.post("http://localhost:5000/api/auth/login", form);
       alert("Login successful ✅");
-
       window.location.href = "/dashboard";
     } catch (err) {
-      alert("Invalid credentials ❌");
+      alert("Login failed ❌");
     }
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h1>⛅ Weather Dashboard</h1>
-        <h2>Login</h2>
+    <div className="login-container">
+
+      <div className="login-left">
+        <h2>⛅ Weather Dashboard</h2>
+
+        <h1>
+          Real-time weather insights, forecasts, and smart predictions in one place.
+        </h1>
+
+        <p>
+          Explore live weather data, visualize trends, and use ML-powered predictions.
+        </p>
+
+        <div className="feature-box">📊 Interactive Graphs</div>
+        <div className="feature-box">🌦 Live Forecast</div>
+        <div className="feature-box">🤖 ML Prediction</div>
+      </div>
+
+      <div className="login-right">
+        <h2>Sign In</h2>
 
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Enter email"
           onChange={(e) =>
             setForm({ ...form, email: e.target.value })
           }
@@ -37,7 +47,7 @@ export default function Login() {
 
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Enter password"
           onChange={(e) =>
             setForm({ ...form, password: e.target.value })
           }
@@ -46,9 +56,10 @@ export default function Login() {
         <button onClick={handleLogin}>Login</button>
 
         <p>
-          Don’t have an account? <a href="/signup">Signup</a>
+          New user? <a href="/signup">Sign Up</a>
         </p>
       </div>
+
     </div>
   );
 }

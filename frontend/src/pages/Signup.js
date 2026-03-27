@@ -11,7 +11,6 @@ export default function Signup() {
         "http://localhost:5000/api/auth/signup",
         form
       );
-
       alert("Signup successful ✅");
       window.location.href = "/";
     } catch (err) {
@@ -20,14 +19,26 @@ export default function Signup() {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h1>⛅ Weather Dashboard</h1>
-        <h2>Signup</h2>
+    <div className="login-container">
+
+      <div className="login-left">
+        <h2>⛅ Weather Dashboard</h2>
+
+        <h1>
+          Create your account and start exploring weather intelligence.
+        </h1>
+
+        <p>
+          Get access to forecasts, graphs, and ML-powered predictions.
+        </p>
+      </div>
+
+      <div className="login-right">
+        <h2>Sign Up</h2>
 
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Enter email"
           onChange={(e) =>
             setForm({ ...form, email: e.target.value })
           }
@@ -35,7 +46,7 @@ export default function Signup() {
 
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Enter password"
           onChange={(e) =>
             setForm({ ...form, password: e.target.value })
           }
@@ -47,6 +58,7 @@ export default function Signup() {
           Already have an account? <a href="/">Login</a>
         </p>
       </div>
+
     </div>
   );
 }

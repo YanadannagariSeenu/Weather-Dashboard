@@ -1,53 +1,73 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(to right, #1e90ff, #00bcd4);
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.auth-container {
-  height: 100vh;
+.login-container {
   display: flex;
+  height: 100vh;
+}
+
+.login-left {
+  flex: 1;
+  background: linear-gradient(135deg, #2196f3, #00c6ff);
+  color: white;
+  padding: 60px;
+
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
 }
 
-.auth-card {
-  background: rgba(255, 255, 255, 0.15);
-  padding: 40px;
-  border-radius: 15px;
-  backdrop-filter: blur(10px);
-  text-align: center;
-  width: 320px;
-  color: white;
+.login-left h1 {
+  font-size: 38px;
+  margin: 20px 0;
 }
 
-.auth-card h1 {
-  margin-bottom: 10px;
+.login-left p {
+  margin-bottom: 30px;
 }
 
-.auth-card input {
-  width: 100%;
-  padding: 10px;
+.feature-box {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 15px;
   margin: 10px 0;
-  border: none;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
-.auth-card button {
-  width: 100%;
-  padding: 10px;
-  background: #007bff;
+.login-right {
+  flex: 1;
+  background: #f5f5f5;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+}
+
+.login-right h2 {
+  margin-bottom: 20px;
+}
+
+.login-right input {
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.login-right button {
+   width: 70%;
+  padding: 14px;
+  margin-top: 15px;
+  background: #2196f3;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   color: white;
+  font-size: 16px;
   cursor: pointer;
 }
 
-.auth-card button:hover {
-  background: #0056b3;
-}
-
-.auth-card a {
-  color: #fff;
-  text-decoration: underline;
+.login-right button:hover {
+  background: #0b7dda;
 }
