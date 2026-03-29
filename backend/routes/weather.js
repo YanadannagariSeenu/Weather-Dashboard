@@ -55,8 +55,8 @@ router.get("/:city", async (req, res) => {
 
     weatherData.prediction = parseFloat(predictedTemp);
 
-    //const newWeather = new Weather(weatherData);
-    //await newWeather.save();
+    const newWeather = new Weather(weatherData);
+    await newWeather.save();
 
     res.json(weatherData);
 
