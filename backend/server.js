@@ -1,28 +1,35 @@
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-
 const weatherRoutes = require("./routes/weather");
-
-
 const authRoutes = require("./routes/auth");
 
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-  mongoose.connect("mongodb://localhost:27017/weatherDB")
+// MongoDB Atlas connection
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected ✅"))
-  .catch(err => console.log(err));
+  .catch(err => console.log("MongoDB Error:", err));
 
+// Test route
+app.get("/", (req, res) => {
+  res.send("Weather API running 🌤️");
+});
 
+// Routes
 app.use("/api/weather", weatherRoutes);
-
-
 app.use("/api/auth", authRoutes);
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+// Dynamic PORT (important for Render)
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
