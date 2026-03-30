@@ -30,15 +30,18 @@ router.get("/:city", async (req, res) => {
       forecast: data.list.slice(0, 5)
     };
 
+    // ✅ FIXED ML FUNCTION (python3 instead of py)
     const runML = (temp, humidity, wind) => {
       return new Promise((resolve) => {
         exec(
-          `py ../ml/model.py ${temp} ${humidity} ${wind}`,
+          `python3 ../ml/model.py ${temp} ${humidity} ${wind}`,
           (error, stdout, stderr) => {
             if (error) {
               console.log("ML Error:", error.message);
               console.log("STDERR:", stderr);
-              resolve(0);
+
+              // ✅ fallback value
+              resolve(temp); 
             } else {
               resolve(stdout);
             }
