@@ -70,4 +70,4 @@ router.get("/:city", async (req, res) => {
   }
 });
 
-module.exports = router; IPDATE METHOD 1 IN IT
+module.exports = router; 
