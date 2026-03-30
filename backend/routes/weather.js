@@ -30,20 +30,24 @@ router.get("/:city", async (req, res) => {
       forecast: data.list.slice(0, 5)
     };
 
+    // ✅ SAFE ML FUNCTION (Works in Windows + Render)
     const runML = (temp, humidity, wind) => {
       return new Promise((resolve) => {
-        exec(
-          `py ../ml/model.py ${temp} ${humidity} ${wind}`,
-          (error, stdout, stderr) => {
-            if (error) {
-              console.log("ML Error:", error.message);
-              console.log("STDERR:", stderr);
-              resolve(0);
-            } else {
-              resolve(stdout);
-            }
+
+        // Try python3 (Render/Linux) OR python (fallback)
+        const command = `python3 ../ml/model.py ${temp} ${humidity} ${wind} || python ../ml/model.py ${temp} ${humidity} ${wind}`;
+
+        exec(command, (error, stdout, stderr) => {
+          if (error) {
+            console.log("ML Error:", error.message);
+            console.log("STDERR:", stderr);
+
+            // ✅ fallback → return current temperature
+            resolve(temp);
+          } else {
+            resolve(stdout);
           }
-        );
+        });
       });
     };
 
@@ -53,7 +57,7 @@ router.get("/:city", async (req, res) => {
       weatherData.windSpeed
     );
 
-    weatherData.prediction = parseFloat(predictedTemp);
+    weatherData.prediction = parseFloat(predictedTemp) || weatherData.temperature;
 
     const newWeather = new Weather(weatherData);
     await newWeather.save();
@@ -70,4 +74,4 @@ router.get("/:city", async (req, res) => {
   }
 });
 
-module.exports = router; 
+module.exports = router;
