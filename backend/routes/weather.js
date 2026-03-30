@@ -30,18 +30,15 @@ router.get("/:city", async (req, res) => {
       forecast: data.list.slice(0, 5)
     };
 
-    // ✅ FIXED ML FUNCTION (python3 instead of py)
     const runML = (temp, humidity, wind) => {
       return new Promise((resolve) => {
         exec(
-          `python3 ../ml/model.py ${temp} ${humidity} ${wind}`,
+          `py ../ml/model.py ${temp} ${humidity} ${wind}`,
           (error, stdout, stderr) => {
             if (error) {
               console.log("ML Error:", error.message);
               console.log("STDERR:", stderr);
-
-              // ✅ fallback value
-              resolve(temp); 
+              resolve(0);
             } else {
               resolve(stdout);
             }
@@ -73,4 +70,4 @@ router.get("/:city", async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router; IPDATE METHOD 1 IN IT
